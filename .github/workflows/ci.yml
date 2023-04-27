@@ -80,7 +80,7 @@ jobs:
         sudo apt-get install \
             mingw-w64-i686-dev \
             binutils-mingw-w64-i686 \
-            libz-mingw-w64 \
+            libz-mingw-w64-dev \
             doxygen \
             graphviz \
             help2man \
@@ -121,7 +121,7 @@ jobs:
         sudo apt-get install \
             mingw-w64-x86-64-dev \
             binutils-mingw-w64-x86-64 \
-            libz-mingw-w64 \
+            libz-mingw-w64-dev \
             doxygen \
             graphviz \
             help2man \
