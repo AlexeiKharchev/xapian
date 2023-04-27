@@ -158,7 +158,8 @@ jobs:
     - name: make
       run: make
     - name: Run tests
-      run: echo 'No tests currently (FIXME: Run tests under wine?)'
+      # FIXME: Run tests under wine?
+      run: echo No tests currently
     - name: Check generated files are in .gitignore
       # grep '^' passes through all input while giving a non-zero exit status
       # if that input is empty.
@@ -196,7 +197,8 @@ jobs:
     - name: make
       run: make
     - name: Run tests
-      run: echo 'No tests currently (FIXME: Run tests under wine?)'
+      # FIXME: Run tests under wine?
+      run: echo No tests currently
     - name: Check generated files are in .gitignore
       # grep '^' passes through all input while giving a non-zero exit status
       # if that input is empty.
