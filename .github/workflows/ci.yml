@@ -30,6 +30,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install \
+            g++-mingw-w64-i686-win32 \
             mingw-w64-i686-dev \
             binutils-mingw-w64-i686 \
             libz-mingw-w64-dev \
@@ -72,6 +73,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install \
+            g++-mingw-w64-x86-64-win32 \
             mingw-w64-x86-64-dev \
             binutils-mingw-w64-x86-64 \
             libz-mingw-w64-dev \
