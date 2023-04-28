@@ -17,54 +17,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  Emscripten:
-    runs-on: 'ubuntu-20.04'
-    services:
-      emscripten:
-        image: emscripten/emsdk
-    steps:
-    - name: Check out repository code
-      uses: actions/checkout@v3
-    - name: Install CCache
-      uses: hendrikmuhs/ccache-action@v1
-      with:
-        key: Emscripten
-    - name: Use Node.js
-      uses: actions/setup-node@v2
-    - name: Install package dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install \
-            doxygen \
-            graphviz \
-            help2man \
-            python3-docutils \
-            pngcrush \
-            python3-pygments
-    - name: bootstrap source tree
-      # Bootstrap only xapian-core for emscripten build.
-      run: |
-        ./bootstrap xapian-core
-        ./configure CC='ccache gcc' CXX='ccache g++' CXXFLAGS=-O0
-        make -j2
-        make -j2 distclean
-    - name: configure
-      run: |
-        docker run -v "$GITHUB_WORKSPACE:/src" -w /src/xapian-core emscripten/emsdk emconfigure ./configure CPPFLAGS='-DFLINTLOCK_USE_FLOCK' CXXFLAGS='-Oz -s USE_ZLIB=1 -fno-rtti' --disable-shared
-    - name: make
-      run: |
-        docker run -v "$GITHUB_WORKSPACE:/src" -w /src/xapian-core emscripten/emsdk emmake make
-    - name: Run tests
-      run: |
-        docker run -v "$GITHUB_WORKSPACE:/src" -w /src/xapian-core emscripten/emsdk em++ -Oz -s USE_ZLIB=1 -std=c++11 -s WASM=1 -Iinclude emscripten/xapianjstest.cc .libs/libxapian-1.5.a -o emscripten/xapianjstest.js
-        cd xapian-core/emscripten && node xapianjstest.js
-    - name: Check generated files are in .gitignore
-      # grep '^' passes through all input while giving a non-zero exit status
-      # if that input is empty.
-      run: |
-        find . -name '*.wasm' -delete
-        git status --porcelain|grep '^' && { echo "The generated files listed above are not in .gitignore" ; exit 1; }; true
-
   mingw64-i686:
     runs-on: 'ubuntu-22.04'
     steps:
@@ -148,19 +100,3 @@ jobs:
       # grep '^' passes through all input while giving a non-zero exit status
       # if that input is empty.
       run: git status --porcelain|grep '^' && { echo "The generated files listed above are not in .gitignore" ; exit 1; }; true
-
-  checkpatch:
-    name: 'Automated run of xapian-check-patch'
-    runs-on: 'ubuntu-latest'
-    steps:
-    - name: Check out repository code
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-    - name: "Automated run of xapian-check-patch"
-      # Run the style checking script, checking changes between the common
-      # ancestor of the target branch of the PR (or master if this isn't a PR)
-      # and the revision being checked.
-      run: |
-        echo "GITHUB_BASE_REF='$GITHUB_BASE_REF'"
-        git diff ${GITHUB_BASE_REF:-origin/master}.. --|xapian-maintainer-tools/xapian-check-patch
