@@ -49,7 +49,7 @@ jobs:
         make -j2
         make -j2 distclean
     - name: configure
-      run: ./configure --host i686-w64-mingw32
+      run: ./configure --host i686-w64-mingw32 --disable-documentation
     - name: make
       run: make
     - name: Run tests
@@ -92,7 +92,7 @@ jobs:
         make -j2
         make -j2 distclean
     - name: configure
-      run: ./configure --host x86_64-w64-mingw32
+      run: ./configure --host x86_64-w64-mingw32 --disable-documentation
     - name: make
       run: make
     - name: Run tests
